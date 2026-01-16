@@ -39,6 +39,9 @@ public class StructurizrExportMojo extends AbstractMojo {
     @Parameter(property = "diagramRenderer", defaultValue = "C4_PLANTUML")
     private DiagramRenderer diagramRenderer;
 
+    @Parameter(property = "viewKey")
+    private String viewKey;
+
     @Parameter(property = "installBrowser", defaultValue = "true")
     private boolean installBrowser;
 
@@ -58,7 +61,7 @@ public class StructurizrExportMojo extends AbstractMojo {
                 case STRUCTURIZR -> new StructurizrExporter(this.installBrowser);
             };
 
-            exportStrategy.export(workspace, Optional.ofNullable(workspaceJson), this.outputDir);
+            exportStrategy.export(workspace, Optional.ofNullable(workspaceJson), this.outputDir, this.viewKey);
         } catch (Exception e) {
             throw new MojoExecutionException("Failed to export Structurizr diagrams", e);
         }
