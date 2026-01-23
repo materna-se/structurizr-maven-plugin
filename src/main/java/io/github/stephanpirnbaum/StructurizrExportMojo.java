@@ -48,20 +48,13 @@ public class StructurizrExportMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException {
         try {
-            getLog().info("Parsing Structurizr DSL: " + workspace.getAbsolutePath());
-            StructurizrDslParser parser = new StructurizrDslParser();
-            parser.parse(workspace);
-            Workspace workspace = parser.getWorkspace();
-
-            ThemeUtils.loadThemes(workspace);
-
             AbstractDiagramExporter exportStrategy = switch (diagramRenderer) {
                 case C4_PLANTUML -> new PlantUMLExporter(this.plantumlLayoutEngine);
                 case MERMAID -> new MermaidExporter();
                 case STRUCTURIZR -> new StructurizrExporter(this.installBrowser);
             };
 
-            exportStrategy.export(workspace, Optional.ofNullable(workspaceJson), this.outputDir, this.viewKey);
+            exportStrategy.export(this.workspace.toPath(), this.workspaceJson != null ? this.workspaceJson.toPath() : null, this.outputDir, this.viewKey);
         } catch (Exception e) {
             throw new MojoExecutionException("Failed to export Structurizr diagrams", e);
         }
