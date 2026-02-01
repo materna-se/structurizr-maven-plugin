@@ -1,20 +1,14 @@
 package io.github.stephanpirnbaum;
 
-import com.structurizr.Workspace;
-import com.structurizr.dsl.StructurizrDslParser;
-import com.structurizr.view.ThemeUtils;
-import io.github.stephanpirnbaum.structurizr.renderer.AbstractDiagramExporter;
-import io.github.stephanpirnbaum.structurizr.renderer.mermaid.MermaidExporter;
-import io.github.stephanpirnbaum.structurizr.renderer.plantuml.PlantUMLExporter;
+import io.github.stephanpirnbaum.structurizr.renderer.Renderer;
+import io.github.stephanpirnbaum.structurizr.renderer.WorkspaceRenderer;
 import io.github.stephanpirnbaum.structurizr.renderer.plantuml.PlantumlLayoutEngine;
-import io.github.stephanpirnbaum.structurizr.renderer.structurizr.StructurizrExporter;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-import java.io.*;
-import java.util.Optional;
+import java.nio.file.Path;
 
 /**
  * Maven Plugin to export Structurizr DSL diagrams as SVG.
@@ -24,39 +18,33 @@ import java.util.Optional;
 @Mojo(name = "export-diagrams")
 public class StructurizrExportMojo extends AbstractMojo {
 
+    private final WorkspaceRenderer workspaceRenderer = new WorkspaceRenderer();
+
     @Parameter(property = "workspace", required = true)
-    private File workspace;
+    private Path workspace;
 
     @Parameter(property = "workspaceJson")
-    private File workspaceJson;
+    private Path workspaceJson;
 
     @Parameter(property = "outputDir", defaultValue = "${project.build.directory}/structurizr-diagrams")
-    private File outputDir;
+    private Path outputDir;
 
-    @Parameter(property = "plantumlLayoutEngine", defaultValue = "GRAPHVIZ")
+    @Parameter(property = "plantumlLayoutEngine")
     private PlantumlLayoutEngine plantumlLayoutEngine;
 
-    @Parameter(property = "diagramRenderer", defaultValue = "C4_PLANTUML")
-    private DiagramRenderer diagramRenderer;
+    @Parameter(property = "renderer")
+    private Renderer renderer;
 
     @Parameter(property = "viewKey")
     private String viewKey;
 
-    @Parameter(property = "installBrowser", defaultValue = "true")
-    private boolean installBrowser;
-
     @Override
     public void execute() throws MojoExecutionException {
         try {
-            AbstractDiagramExporter exportStrategy = switch (diagramRenderer) {
-                case C4_PLANTUML -> new PlantUMLExporter(this.plantumlLayoutEngine);
-                case MERMAID -> new MermaidExporter();
-                case STRUCTURIZR -> new StructurizrExporter(this.installBrowser);
-            };
-
-            exportStrategy.export(this.workspace.toPath(), this.workspaceJson != null ? this.workspaceJson.toPath() : null, this.outputDir, this.viewKey);
+            this.workspaceRenderer.render(this.workspace, this.workspaceJson, this.outputDir, this.viewKey, this.renderer, this.plantumlLayoutEngine);
         } catch (Exception e) {
             throw new MojoExecutionException("Failed to export Structurizr diagrams", e);
         }
     }
+
 }
