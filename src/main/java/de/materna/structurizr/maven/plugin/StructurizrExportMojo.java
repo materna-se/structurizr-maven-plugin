@@ -1,8 +1,8 @@
-package io.github.stephanpirnbaum;
+package de.materna.structurizr.maven.plugin;
 
-import io.github.stephanpirnbaum.structurizr.renderer.Renderer;
-import io.github.stephanpirnbaum.structurizr.renderer.WorkspaceRenderer;
-import io.github.stephanpirnbaum.structurizr.renderer.plantuml.PlantumlLayoutEngine;
+import de.materna.structurizr.renderer.Renderer;
+import de.materna.structurizr.renderer.WorkspaceRenderer;
+import de.materna.structurizr.renderer.plantuml.PlantumlLayoutEngine;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
