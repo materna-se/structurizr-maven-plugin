@@ -32,6 +32,9 @@ public class StructurizrExportMojo extends AbstractMojo {
     @Parameter(property = "plantumlLayoutEngine")
     private PlantumlLayoutEngine plantumlLayoutEngine;
 
+    @Parameter(property = "playwrightWsEndpoint")
+    private String playwrightWsEndpoint;
+
     @Parameter(property = "renderer")
     private Renderer renderer;
 
@@ -41,7 +44,7 @@ public class StructurizrExportMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException {
         try {
-            this.workspaceRenderer.render(this.workspace, this.workspaceJson, this.outputDir, this.viewKey, this.renderer, this.plantumlLayoutEngine);
+            this.workspaceRenderer.render(this.workspace, this.workspaceJson, this.outputDir, this.viewKey, this.renderer, this.plantumlLayoutEngine, this.playwrightWsEndpoint);
         } catch (Exception e) {
             throw new MojoExecutionException("Failed to export Structurizr diagrams", e);
         }
