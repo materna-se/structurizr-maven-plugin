@@ -1,0 +1,161 @@
+= structurizr-maven-plugin
+
+This plugin supports the rendering of Structurizr DSL views during the Maven build using different rendering algorithms including the same as provided by the Structurizr UI.
+
+The plugin is configurable to support different renderers (C4-PlantUML, Mermaid and the Structurizr renderer used by the Structurizr Lite UI) and, when the latter is used, supports also manual layout files.
+
+NOTE:: https://github.com/materna-se/structurizr-renderer[structurizr-renderer] is used under the hood. For further details on usage and configuration, see its readme.
+
+The following shows the different usage scenarios.
+
+[source,xml]
+.Structurizr renderer with automatic layout. Auto-Layout must be enabled in the DSL file.
+----
+<plugin>
+    <groupId>de.materna.structurizr</groupId>
+    <artifactId>structurizr-maven-plugin</artifactId>
+    <version>${structurizr-maven-plugin.version}</version>
+    <executions>
+        <execution>
+            <id>render-structurizr-auto-layout</id>
+            <phase>site</phase>
+            <goals>
+                <goal>export-diagrams</goal>
+            </goals>
+            <configuration>
+                <playwrightWsEndpoint>ws://localhost:3000/playwright/chromium</playwrightWsEndpoint> <!--1-->
+                <workspace>${project.basedir}/workspace-auto.dsl</workspace>
+                <renderer>STRUCTURIZR</renderer>
+                <outputDir>${project.build.directory}/structurizr-diagrams/structurizr/auto-layout</outputDir>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+----
+<1> Optionally configure a Playwright server to connect to instead of triggering local install.
+
+[source,xml]
+.Structurizr renderer with manual layout
+----
+<plugin>
+    <groupId>de.materna.structurizr</groupId>
+    <artifactId>structurizr-maven-plugin</artifactId>
+    <version>${structurizr-maven-plugin.version}</version>
+    <executions>
+        <execution>
+            <id>render-structurizr-manual-layout</id>
+            <phase>site</phase>
+            <goals>
+                <goal>export-diagrams</goal>
+            </goals>
+            <configuration>
+                <playwrightWsEndpoint>ws://localhost:3000/playwright/chromium</playwrightWsEndpoint> <!--1-->
+                <workspace>${project.basedir}/workspace.dsl</workspace>
+                <workspaceJson>${project.basedir}/workspace.json</workspaceJson>
+                <renderer>STRUCTURIZR</renderer>
+                <outputDir>${project.build.directory}/structurizr-diagrams/structurizr/manual-layout</outputDir>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+----
+<1> Optionally configure a Playwright server to connect to instead of triggering local install.
+
+[source,xml]
+.C4-PlantUML renderer with GraphViz layouting
+----
+<plugin>
+    <groupId>de.materna.structurizr</groupId>
+    <artifactId>structurizr-maven-plugin</artifactId>
+    <version>${structurizr-maven-plugin.version}</version>
+    <executions>
+        <execution>
+            <id>render-c4-plantuml-graphviz</id>
+            <goals>
+                <goal>export-diagrams</goal>
+            </goals>
+            <phase>site</phase>
+            <configuration>
+                <workspace>${project.basedir}/workspace.dsl</workspace>
+                <plantumlLayoutEngine>GRAPHVIZ</plantumlLayoutEngine>
+                <renderer>PLANTUML_C4</renderer>
+                <outputDir>${project.build.directory}/structurizr-diagrams/c4-plantuml/graphviz</outputDir>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+----
+
+[source,xml]
+.C4-PlantUML renderer with Smetana layouting
+----
+<plugin>
+    <groupId>de.materna.structurizr</groupId>
+    <artifactId>structurizr-maven-plugin</artifactId>
+    <version>${structurizr-maven-plugin.version}</version>
+    <executions>
+        <execution>
+            <id>render-c4-plantuml-smetana</id>
+            <goals>
+                <goal>export-diagrams</goal>
+            </goals>
+            <phase>site</phase>
+            <configuration>
+                <workspace>${project.basedir}/workspace.dsl</workspace>
+                <plantumlLayoutEngine>SMETANA</plantumlLayoutEngine>
+                <renderer>PLANTUML_C4</renderer>
+                <outputDir>${project.build.directory}/structurizr-diagrams/c4-plantuml/smetana</outputDir>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+----
+
+[source,xml]
+.C4-PlantUML renderer with ELK layouting
+----
+<plugin>
+    <groupId>de.materna.structurizr</groupId>
+    <artifactId>structurizr-maven-plugin</artifactId>
+    <version>${structurizr-maven-plugin.version}</version>
+    <executions>
+        <execution>
+            <id>render-c4-plantuml-elk</id>
+            <goals>
+                <goal>export-diagrams</goal>
+            </goals>
+            <phase>site</phase>
+            <configuration>
+                <workspace>${project.basedir}/workspace.dsl</workspace>
+                <plantumlLayoutEngine>ELK</plantumlLayoutEngine>
+                <renderer>PLANTUML_C4</renderer>
+                <outputDir>${project.build.directory}/structurizr-diagrams/c4-plantuml/elk</outputDir>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+----
+
+[source,xml]
+.Mermaid renderer
+----
+<plugin>
+    <groupId>de.materna.structurizr</groupId>
+    <artifactId>structurizr-maven-plugin</artifactId>
+    <version>${structurizr-maven-plugin.version}</version>
+    <executions>
+        <execution>
+            <id>render-mermaid</id>
+            <phase>install</phase>
+            <goals>
+                <goal>export-diagrams</goal>
+            </goals>
+            <configuration>
+                <workspace>${project.basedir}/workspace.dsl</workspace>
+                <renderer>MERMAID</renderer>
+                <outputDir>${project.build.directory}/structurizr-diagrams/mermaid</outputDir>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+----
