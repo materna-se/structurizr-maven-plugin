@@ -28,6 +28,8 @@
     <scm>
         <url>https://github.com/materna-se/structurizr-maven-plugin</url>
         <connection>scm:git:https://github.com/materna-se/structurizr-maven-plugin.git</connection>
+        <developerConnection>scm:git:https://github.com/materna-se/structurizr-maven-plugin.git</developerConnection>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
@@ -40,7 +42,7 @@
         <dependency>
             <groupId>de.materna.structurizr</groupId>
             <artifactId>structurizr-renderer</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.0-M1</version>
         </dependency>
 
         <!-- Maven Plugin -->
@@ -121,6 +123,33 @@
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.4.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.12.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>3.2.8</version>
                         <executions>
@@ -148,7 +177,18 @@
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>ossrh</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
                         </configuration>
+                        <executions>
+                            <execution>
+                                <id>publish</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>publish</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
@@ -158,6 +198,10 @@
                     <id>ossrh</id>
                     <url>https://central.sonatype.com/repository/maven-snapshots/</url>
                 </snapshotRepository>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/</url>
+                </repository>
             </distributionManagement>
         </profile>
     </profiles>
