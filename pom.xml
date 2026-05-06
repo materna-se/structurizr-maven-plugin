@@ -38,13 +38,14 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <version.structurizr-renderer>1.1.0</version.structurizr-renderer>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>de.materna.structurizr</groupId>
             <artifactId>structurizr-renderer</artifactId>
-            <version>1.0.0</version>
+            <version>${version.structurizr-renderer}</version>
         </dependency>
 
         <!-- Maven Plugin -->
